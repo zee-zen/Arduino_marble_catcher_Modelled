@@ -1,5 +1,5 @@
-#ifndef motorcontrol
-#defin motorcontrol
+#ifndef motorcontrol_h
+#define motorcontrol_h
 
 
 #endif
