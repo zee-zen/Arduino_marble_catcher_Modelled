@@ -33,8 +33,9 @@ Timing the length of this output, we can calculate the distance of the marble fr
 
 
 
-#define PIN_LS 2
-#define PIN_catcher_sensor 
+//#define PIN_LS 2
+#define PIN_catcher_sensor_output 3
+#define PIN_cather_sensor_input 15
 #define PIN_SR1_IN 11
 #define PIN_SR1_clck 12
 #define PIN_SR1_Rout_clck 13
@@ -43,7 +44,8 @@ Timing the length of this output, we can calculate the distance of the marble fr
 #define PIN_SR2_Rout_clck 19
 #define PIN_MUX_output 16
 #define Max_distance_cm_US 50 //Maximum distance to check for response in 
-#define US_polling_interval_ms 6
+#define US_polling_interval_ms 6 //With Timer2 the maximum interval period is 16ms. For better resoution, use Timer1
+// Timer2 prescaler is set at 1024, which is its maximum.
 #define US_echo_time_roundtrip_cm 57
 #define NoECHO 0
 
@@ -57,25 +59,27 @@ volatile bool catcher_success=0;
 
 const uint8_t seperation_distance_US_cm=12;
 uint8_t current_position_marble;
-unit8_t horiz_vel_marble,vert_vel_marble; // approximate values for the horizontal and vertical velocities of the marble
+uint8_t horiz_vel_marble,vert_vel_marble; // approximate values for the horizontal and vertical velocities of the marble
 uint8_t marble_direction_motion=0; //0 for Left-to-right; 1 for right-to-Left ; 
 uint8_t current_US_number=0;
-uint8_t time_us
+uint8_t SR1_serial_input=1;
+uint8_t time_interval_us
 
 void PIN_setup();
-void PCINT_MUX_setup(byte pin);
+void PCINT_attach_interrupt(byte pin);
+void PCINT_dettach_interrupt(byte pin);
+void setup_timer_interrupt(uint8_t period_ms);
+
+void Trigger_input_SR();
+void MUX_control_input_SR();
+unsigned int echo_timer_us(); // Function to determine the length of the echo output.
+void increment_US();
 
 void determine_motion_direction();
 void determine_marble_velocity();
 void estimate_final_position();
-unsigned int echo_timer_us(); // Function to determine the length of the echo output.
 void measure_distance_cm_US(uint8_t time);
 
-void Trigger_input_SR();
-void MUX_control_input_SR();
-
-
-void 
 
 
 

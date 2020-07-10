@@ -36,20 +36,6 @@ State 4 - Motor correction
 
 Psuedo-code
 
-void US1_ISR()
-    checkpoint1=True
-    number_of_balls+=1
-
-void LS_ISR()
-    marble_noncompliant=True
-    number_of_balls-=1
-
-void US2_ISR()
-    checkpoint2=True
-
-void US3_ISR()
-    checkpoint3=True
-
 
 
 */
@@ -62,6 +48,10 @@ ISR(PCINT1_vect)
     MUX_output_detected = !(MUX_output_detected);
 }
 
+ISR(TIMER2_COMPA_vect)
+{
+    Trigger_US=1;
+}
 
 void setup()
 {
