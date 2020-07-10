@@ -54,6 +54,14 @@ void US3_ISR()
 
 */
 
+// ISR to detect output echo pulse from ultrasonic sensors.
+// MUX output as defined in sensormodule.h is on port 16 of Arduino. Therefore, the ISR uses the PCINT1_vect interrupt vector.
+// If MUX output is connected to D0 to D7 (replace with PCINT2_vect) or D8 - D13 (replace with PCINT0_vect).
+ISR(PCINT1_vect)
+{
+    MUX_output_detected = !(MUX_output_detected);
+}
+
 
 void setup()
 {
