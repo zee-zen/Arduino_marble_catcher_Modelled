@@ -1,4 +1,4 @@
-#include<Arduino.h>
+#include <Arduino.h>
 #include "NewPing.h"
 #include "sensormodule.h"
 #include "motorcontrol.h"
@@ -18,6 +18,8 @@ Assumptions and boundary conditions
 2. Marble rolls down the plank and does not bounce around.
 3. Plank is not too rough or has imperfections that affect the trajectory of the marble significantly
 4. Setup is located in an environment with ambient high frequency noise. (roughly 40KHz in our case)
+5. Experiment is conducted under NTP conditions. Distance measurements using the Ultrasonic sensor 
+are dependent on the velocity of sound in air and therefore susceptible to temperature and pressure variations.
 
 Naming conventions:
 Ultrasonic sensor : US
@@ -26,17 +28,27 @@ Laser sensor - LS
 
 State machine definition
 
-State1 (Idle state): No marble detected on the board
-Timer interrupt every 10ms to ping US1, which is located at the very top. US1 would be the sensor that first
-detects the presence of any object.
-If no object is detected, then US1 returns a Low (0).
-If an object is detected, then US1 returns the distance of the object from it.
-current time = millis()
-State transition to State2
+State 1 - Idle state
+    Timer interrupt every 20ms
+State 2 - Pre-check state
+State 3 - Motor commit
+State 4 - Motor correction
 
-State2 (Pre-check state): Timer interrupt for every 10ms to ping US1 continues.
-Setup LS to pin-change interrupt.
+Psuedo-code
 
+void US1_ISR()
+    checkpoint1=True
+    number_of_balls+=1
+
+void LS_ISR()
+    marble_noncompliant=True
+    number_of_balls-=1
+
+void US2_ISR()
+    checkpoint2=True
+
+void US3_ISR()
+    checkpoint3=True
 
 
 
