@@ -19,7 +19,7 @@ void MotorControl::SpeedWrite(int d,int Pwm)
  _Pwm = constrain(_Pwm, 0, 255);
 
  // Is the PWM value positive, if yes go forward.
- if (_Pwm >= 1 && _Pwm <= 255)
+ if (_Pwm >= 64 && _Pwm <= 255)
  {
    if (_d=1)
    {
@@ -37,13 +37,21 @@ void MotorControl::SpeedWrite(int d,int Pwm)
    }
  }
 
- // Is the PWM value zero, if yes the motor is idle.
- else if (_Pwm == 0)
+ // Is the PWM value is lower limit, if yes the motor is braked.
+ else if (_Pwm ==64)
  {
    digitalWrite(_pinFwd, HIGH);
    digitalWrite(_pinRev, HIGH);
    analogWrite (_pinFwd, _Pwm);
    _Direction = 'B';
+ }
+// Is the PWM value is 0, if yes the motor is spooling or idle.
+ else if (_Pwm ==0)
+ {
+   digitalWrite(_pinFwd, HIGH);
+   digitalWrite(_pinRev, LOW);
+   analogWrite (_pinFwd, _Pwm);
+   _Direction = 'I';
  }
 }
 
